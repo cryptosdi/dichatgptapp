@@ -1,19 +1,24 @@
 import React from 'react';
+import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core';
+import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 
 function App() {
+  const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
+    key: 'mantine-color-scheme',
+    defaultValue: 'dark',
+    getInitialValueInEffect: true,
+  });
+
+  const toggleColorScheme = (value?: ColorScheme) =>
+    setColorScheme(value || (colorScheme === 'dark' ? 'light' : 'dark'));
+
+  useHotkeys([['mod+J', () => toggleColorScheme()]]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          react-dichatgpt
-        </a>
-      </header>
-    </div>
+    <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
+      <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
+      </MantineProvider>
+    </ColorSchemeProvider>
   );
 }
 
