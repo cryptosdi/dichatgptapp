@@ -6,6 +6,7 @@ import {
     Button,
     Center,
     Header,
+    Container,
     MediaQuery,
     Navbar,
     rem,
@@ -19,8 +20,21 @@ import {
     useMantineColorScheme,
     useMantineTheme,
 } from "@mantine/core";
+import {
+    IconBrandGithub,
+    IconBrandTwitter,
+    IconDatabase,
+    IconMessage,
+    IconMoonStars,
+    IconPlus,
+    IconSearch,
+    IconSettings,
+    IconSunHigh,
+    IconX,
+} from "@tabler/icons-react";
+
 import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
-import { LogoBIcon } from "./Logo";
+import { LogoDIcon, LogoLIcon } from "./Logo";
 
 
 export default function Layout() {
@@ -35,35 +49,57 @@ export default function Layout() {
             className={`${colorScheme}-theme`}
             navbarOffsetBreakpoint="sm"
             asideOffsetBreakpoint="sm"
-            header={<Header height={5} p="xs">{ }</Header>}
+            header={
+                <Header height={10} p="xs">
+
+                </Header>
+            }
             footer={
                 <Footer height={5} p="xs">
                 </Footer>
             }
             aside={
-                <MediaQuery smallerThan="sm" styles={{ display: 'none' }}>
-                    <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 5, lg: 5 }}>
-                    </Aside>
-                </MediaQuery>
+                <Aside p="md" hiddenBreakpoint="sm" width={{ sm: 20, lg: 45 }}
+                    style={{ display: 'flex', alignItems: 'center', marginTop: 0 }}
+                >
+                    <ActionIcon
+                        size="xs"
+                        onClick={() => toggleColorScheme()}
+                    >
+                        {colorScheme === "dark" ? (
+                            <IconSunHigh size={20} />
+                        ) : (
+                            <IconMoonStars size={20} />
+                        )}
+                    </ActionIcon>
+                </Aside>
+
             }
             navbar={
                 <Navbar p="md" hiddenBreakpoint="sm" width={{ sm: 200, lg: 300 }}>
                     <Navbar.Section className="app-region-drag">
                         <Box
                             style={{
-                                height: 30,
+                                height: 50,
                                 display: "flex",
                                 alignItems: "center",
                                 justifyContent: "center",
                                 borderBottom: border,
                             }}
                         >
-                            <LogoBIcon style={{
-                                height: 20,
-                                display: "block",
-                            }}
-                            ></LogoBIcon>
-                            <Text weight="bold">Dichatgpt</Text>
+                            {colorScheme === "dark" ? (
+                                <LogoDIcon style={{
+                                    height: 20,
+                                    display: "block",
+                                }}
+                                ></LogoDIcon>
+                            ) : (
+                                <LogoLIcon style={{
+                                    height: 20,
+                                    display: "block",
+                                }}></LogoLIcon>
+                            )}
+
                         </Box>
                     </Navbar.Section>
                 </Navbar>
