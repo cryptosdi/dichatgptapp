@@ -50,7 +50,7 @@ export default function Layout() {
             navbarOffsetBreakpoint="sm"
             asideOffsetBreakpoint="sm"
             header={
-                <Header height={10} p="xs">
+                <Header height={5} p="xs">
 
                 </Header>
             }
