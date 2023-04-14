@@ -35,14 +35,16 @@ import {
 
 import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
 import { LogoDIcon, LogoLIcon } from "./Logo";
-
+import { useEffect, useState } from "react";
 
 export default function Layout() {
     const theme = useMantineTheme();
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-
+    const [tab, setTab] = useState<"Chats" | "Prompts">("Chats");
     const border = `${rem(1)} solid ${theme.colorScheme === "dark" ? theme.colors.dark[4] : theme.colors.gray[2]
         }`;
+    const [hovered, setHovered] = useState(false);
+    const [clicked, setClicked] = useState(false);
 
     return (
         <AppShell
@@ -102,7 +104,47 @@ export default function Layout() {
 
                         </Box>
                     </Navbar.Section>
-                </Navbar>
+                    <Navbar.Section
+                        sx={(theme) => ({
+                            padding: rem(4),
+                            background:
+                                theme.colorScheme === "dark"
+                                    ? theme.colors.dark[8]
+                                    : theme.colors.gray[1],
+                            borderBottom: border,
+                        })}
+                    >
+                        <SegmentedControl
+                            fullWidth
+                            value={tab}
+                            onChange={(value) => setTab(value as typeof tab)}
+                            data={["Chats", "Prompts"]}
+                        />
+                        <Box sx={{ padding: 4 }}>
+                            {tab === "Chats" && (
+                                <Button
+                                    fullWidth
+                                    variant="outline"
+                                    styles={{
+                                        root: {
+                                            borderColor: hovered ? '#6ecde4' : '#8a9da2',
+                                            backgroundColor: 'transparent',
+                                            color: '#fff'
+                                        },
+                                    }}
+                                    onMouseEnter={() => setHovered(true)}
+                                    onMouseLeave={() => setHovered(false)}
+                                    onClick={() => setClicked(!clicked)}
+                                >
+                                    New Chat
+                                </Button>
+                            )}
+                            {tab === "Prompts" && (
+                                <Text>TEST</Text>
+                            )}
+                        </Box>
+                    </Navbar.Section>
+                </ Navbar>
             }
             layout="alt"
             padding={0}
