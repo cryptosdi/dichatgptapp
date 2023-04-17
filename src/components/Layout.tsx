@@ -37,6 +37,7 @@ import {
 import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
 import { LogoDIcon, LogoLIcon } from "./Logo";
 import { useEffect, useState } from "react";
+import {LoginModal} from "./Login"
 
 export default function Layout() {
     const theme = useMantineTheme();
@@ -131,8 +132,8 @@ export default function Layout() {
                                             borderColor: hovered ? '#6ecde4' : '#8a9da2',
                                             backgroundColor: 'transparent',
                                             color: theme.colorScheme === "dark"
-                                            ? theme.colors.gray[0]
-                                            : theme.colors.dark[6],
+                                                ? theme.colors.gray[0]
+                                                : theme.colors.dark[6],
                                         },
                                     }}
                                     onMouseEnter={() => setHovered(true)}
@@ -157,11 +158,13 @@ export default function Layout() {
                                     <IconSettings size={20} />
                                 </ActionIcon>
                             </Tooltip>
-                            <Tooltip label="Login">
-                                <ActionIcon sx={{ flex: 1 }} size="xl">
-                                    <IconLogin size={20} />
-                                </ActionIcon>
-                            </Tooltip>
+                            <LoginModal>
+                                <Tooltip label="Login">
+                                    <ActionIcon sx={{ flex: 1 }} size="xl">
+                                        <IconLogin size={20} />
+                                    </ActionIcon>
+                                </Tooltip>
+                            </LoginModal>
                         </Center>
                     </Navbar.Section>
                 </ Navbar>
