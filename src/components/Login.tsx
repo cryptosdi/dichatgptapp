@@ -48,8 +48,14 @@ export function LoginModal({ children }: { children: ReactElement }) {
                     close();
                 })
                 .catch(error => {
-                    console.error(error);
                     setLoading(false);
+                    if (error.response) {
+                        console.error(error.response.data);
+                        console.error(error.response.status);
+                        setError(error.response.data.message)
+                    } else {
+                        console.error(error.message);
+                    }
                 })
             : axios.post('http://127.0.0.1:5000/login', {
                 un: values.name,
@@ -61,8 +67,14 @@ export function LoginModal({ children }: { children: ReactElement }) {
                     close();
                 })
                 .catch(error => {
-                    console.error(error);
-                     setLoading(false);
+                    setLoading(false);
+                    if (error.response) {
+                        console.error(error.response.data);
+                        console.error(error.response.status);
+                        setError(error.response.data.message)
+                    } else {
+                        console.error(error.message);
+                    }
                 })
     };
 
