@@ -43,7 +43,8 @@ export function LoginModal({ children }: { children: ReactElement }) {
                 pw: values.password,
             })
                 .then(response => {
-                    console.log(response.data);
+                    console.log(response.data.data.access_token);
+                    localStorage.setItem('access_token', response.data.data.access_token)
                     setLoading(false);
                     close();
                 })
@@ -62,7 +63,8 @@ export function LoginModal({ children }: { children: ReactElement }) {
                 pw: values.password,
             })
                 .then(response => {
-                    console.log(response.data);
+                    console.log(response.data.data.access_token);
+                    localStorage.setItem('access_token', response.data.data.access_token)
                     setLoading(false);
                     close();
                 })
