@@ -12,7 +12,8 @@ import {
 import { cloneElement, ReactElement } from "react";
 import { useForm } from '@mantine/form';
 import { IconLock } from '@tabler/icons-react';
-import React, { useState } from 'react';
+import { useState } from 'react';
+import axios from 'axios'
 
 export function LoginModal({ children }: { children: ReactElement }) {
     const [opened, { open, close }] = useDisclosure(false);
@@ -32,17 +33,37 @@ export function LoginModal({ children }: { children: ReactElement }) {
         },
     });
 
-    const handleSubmit = () => {
+    type FormValues = typeof form.values;
+
+    const handleSubmit = (values: FormValues) => {
         setLoading(true);
-        setError("");
-        setTimeout(() => {
-            setLoading(false);
-            setError(
-                formType === 'register'
-                    ? 'User with this name already exists'
-                    : 'User with this name does not exist'
-            );
-        }, 3000);
+        formType === 'register' ?
+            axios.post('http://127.0.0.1:5000/login/reg', {
+                un: values.name,
+                pw: values.password,
+            })
+                .then(response => {
+                    console.log(response.data);
+                    setLoading(false);
+                    close();
+                })
+                .catch(error => {
+                    console.error(error);
+                    setLoading(false);
+                })
+            : axios.post('http://127.0.0.1:5000/login', {
+                un: values.name,
+                pw: values.password,
+            })
+                .then(response => {
+                    console.log(response.data);
+                    setLoading(false);
+                    close();
+                })
+                .catch(error => {
+                    console.error(error);
+                     setLoading(false);
+                })
     };
 
 
