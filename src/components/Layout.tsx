@@ -30,6 +30,7 @@ import {
     IconSearch,
     IconSettings,
     IconSunHigh,
+    IconLogin,
     IconX,
 } from "@tabler/icons-react";
 
@@ -129,7 +130,9 @@ export default function Layout() {
                                         root: {
                                             borderColor: hovered ? '#6ecde4' : '#8a9da2',
                                             backgroundColor: 'transparent',
-                                            color: '#fff'
+                                            color: theme.colorScheme === "dark"
+                                            ? theme.colors.gray[0]
+                                            : theme.colors.dark[6],
                                         },
                                     }}
                                     onMouseEnter={() => setHovered(true)}
@@ -143,6 +146,23 @@ export default function Layout() {
                                 <Text>TEST</Text>
                             )}
                         </Box>
+                    </Navbar.Section>
+                    <Navbar.Section grow component={ScrollArea}>
+
+                    </Navbar.Section>
+                    <Navbar.Section sx={{ borderTop: border }} p="xs">
+                        <Center>
+                            <Tooltip label="Settings">
+                                <ActionIcon sx={{ flex: 1 }} size="xl">
+                                    <IconSettings size={20} />
+                                </ActionIcon>
+                            </Tooltip>
+                            <Tooltip label="Login">
+                                <ActionIcon sx={{ flex: 1 }} size="xl">
+                                    <IconLogin size={20} />
+                                </ActionIcon>
+                            </Tooltip>
+                        </Center>
                     </Navbar.Section>
                 </ Navbar>
             }
