@@ -29,20 +29,36 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [cookies, setCookie, removeCookie] = useCookies(['token']);
     const [user, setUser] = useState<User | null>(null);
 
+    // useEffect(() => {
+    //     if (cookies.token) {
+    //         const decodedToken: any = jwt_decode(cookies.token);
+    //         const currentTime = Date.now() / 1000;
+    //         const userId= decodedToken.sub;
+    //         if (decodedToken.exp < currentTime) {
+    //             // Token 已过期，执行退出登录操作
+    //             logout();
+    //         } else {
+    //             // Token 未过期，将 loggedIn 状态设置为 true
+    //             setUser({ userId: userId, isLogged: true });
+    //         }
+    //     }
+    // }, [cookies.token]);
+
     useEffect(() => {
-        if (cookies.token) {
-            const decodedToken: any = jwt_decode(cookies.token);
-            const currentTime = Date.now() / 1000;
-            const userId= decodedToken.sub;
-            if (decodedToken.exp < currentTime) {
-                // Token 已过期，执行退出登录操作
-                logout();
-            } else {
-                // Token 未过期，将 loggedIn 状态设置为 true
-                setUser({ userId: userId, isLogged: true });
+        const interval = setInterval(() => {
+          if (cookies.token) {
+            const decodedToken: any = jwt_decode(cookies.token); 
+            if (decodedToken.exp < Date.now() / 1000) {
+              logout();
             }
-        }
-    }, [cookies.token]);
+          }
+        }, 3600000);
+    
+        return () => {
+          clearInterval(interval);
+        };
+      }, [cookies.token]);
+    
 
     const login = (token: string) => {
         setCookie('token', token, { path: '/' });

@@ -87,74 +87,80 @@ export function LoginModal({ children }: { children: ReactElement }) {
     return (
         <>
             {cloneElement(children, { onClick: open })}
-            <Modal opened={opened} onClose={close} title="Login" centered>
-                <Paper
-                    p={0}
-                    shadow={'sm'}
+            {(user?.userId && user?.isLogged) ? (
+                <Modal opened={opened} onClose={close} title="Focus demo">
+                    <Text>you have been logined~</Text>
+                </Modal>
+             ) : (
+                <Modal opened={opened} onClose={close} title="Login" centered>
+                    <Paper
+                        p={0}
+                        shadow={'sm'}
 
-                    sx={{
-                        position: 'relative',
-                        backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
-                    }}
-                >
-                    <form onSubmit={form.onSubmit(handleSubmit)}>
-                        <LoadingOverlay visible={loading} />
-                        <TextInput
-                            data-autofocus
-                            required
-                            placeholder="Your name"
-                            label="name"
-                            {...form.getInputProps('name')}
-                        />
-                        <PasswordInput
-                            mt="md"
-                            required
-                            placeholder="Password"
-                            label="Password"
-                            icon={<IconLock size={16} stroke={1.5} />}
-                            {...form.getInputProps('password')}
-                        />
-
-                        {formType === 'register' && (
+                        sx={{
+                            position: 'relative',
+                            backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
+                        }}
+                    >
+                        <form onSubmit={form.onSubmit(handleSubmit)}>
+                            <LoadingOverlay visible={loading} />
+                            <TextInput
+                                data-autofocus
+                                required
+                                placeholder="Your name"
+                                label="name"
+                                {...form.getInputProps('name')}
+                            />
                             <PasswordInput
                                 mt="md"
                                 required
-                                label="Confirm Password"
-                                placeholder="Confirm password"
+                                placeholder="Password"
+                                label="Password"
                                 icon={<IconLock size={16} stroke={1.5} />}
-                                {...form.getInputProps('confirmPassword')}
+                                {...form.getInputProps('password')}
                             />
-                        )}
+
+                            {formType === 'register' && (
+                                <PasswordInput
+                                    mt="md"
+                                    required
+                                    label="Confirm Password"
+                                    placeholder="Confirm password"
+                                    icon={<IconLock size={16} stroke={1.5} />}
+                                    {...form.getInputProps('confirmPassword')}
+                                />
+                            )}
 
 
-                        {error && (
-                            <Text color="red" size="sm" mt="sm">
-                                {error}
-                            </Text>
-                        )}
+                            {error && (
+                                <Text color="red" size="sm" mt="sm">
+                                    {error}
+                                </Text>
+                            )}
 
-                        {(
-                            <Group position="apart" mt="xl">
-                                <Anchor
-                                    component="button"
-                                    type="button"
-                                    color="dimmed"
-                                    onClick={toggleFormType}
-                                    size="sm"
-                                >
-                                    {formType === 'register'
-                                        ? 'Have an account? Login'
-                                        : "Don't have an account? Register"}
-                                </Anchor>
+                            {(
+                                <Group position="apart" mt="xl">
+                                    <Anchor
+                                        component="button"
+                                        type="button"
+                                        color="dimmed"
+                                        onClick={toggleFormType}
+                                        size="sm"
+                                    >
+                                        {formType === 'register'
+                                            ? 'Have an account? Login'
+                                            : "Don't have an account? Register"}
+                                    </Anchor>
 
-                                <Button color="blue" type="submit">
-                                    {formType === 'register' ? 'Register' : 'Login'}
-                                </Button>
-                            </Group>
-                        )}
-                    </form>
-                </Paper>
-            </Modal>
+                                    <Button color="blue" type="submit">
+                                        {formType === 'register' ? 'Register' : 'Login'}
+                                    </Button>
+                                </Group>
+                            )}
+                        </form>
+                    </Paper>
+                </Modal>
+             )}
         </>
     );
 }
