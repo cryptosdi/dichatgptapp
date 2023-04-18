@@ -9,14 +9,12 @@ import {
     LoadingOverlay,
     Anchor, useMantineTheme,
 } from '@mantine/core';
-import { cloneElement, ReactElement } from "react";
+import { cloneElement, ReactElement, useContext } from "react";
 import { useForm } from '@mantine/form';
 import { IconLock } from '@tabler/icons-react';
 import { useState } from 'react';
 import axios from 'axios'
-import { useCookies } from 'react-cookie';
-import jwt_decode from 'jwt-decode';
-import jwt from 'jsonwebtoken';
+import { useAuth } from '../utils/token'
 
 export function LoginModal({ children }: { children: ReactElement }) {
     const [opened, { open, close }] = useDisclosure(false);
@@ -35,7 +33,7 @@ export function LoginModal({ children }: { children: ReactElement }) {
             confirmPassword: '',
         },
     });
-
+    const { isLogged, login, logout } = useAuth();
     type FormValues = typeof form.values;
 
     const handleSubmit = (values: FormValues) => {
@@ -46,8 +44,8 @@ export function LoginModal({ children }: { children: ReactElement }) {
                 pw: values.password,
             })
                 .then(response => {
-                    console.log(response.data.data.access_token);
-                    localStorage.setItem('access_token', response.data.data.access_token)
+                    const token = response.data.data.access_token;
+                    console.log(token);
                     setLoading(false);
                     close();
                 })
@@ -66,8 +64,10 @@ export function LoginModal({ children }: { children: ReactElement }) {
                 pw: values.password,
             })
                 .then(response => {
-                    console.log(response.data.data.access_token);
-                    localStorage.setItem('access_token', response.data.data.access_token)
+                    const token = response.data.data.access_token;
+                    console.log(token);
+                    //localStorage.setItem('access_token', response.data.data.access_token)
+                    login(token);
                     setLoading(false);
                     close();
                 })

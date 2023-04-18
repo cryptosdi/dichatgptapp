@@ -2,6 +2,7 @@ import React from 'react';
 import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core';
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import Layout from './components/Layout';
+import { AuthProvider } from './utils/token';
 
 function App() {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -18,7 +19,9 @@ function App() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
-        <Layout />
+        <AuthProvider>
+          <Layout />
+        </AuthProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );
