@@ -38,6 +38,7 @@ import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
 import { LogoDIcon, LogoLIcon } from "./Logo";
 import { useEffect, useState } from "react";
 import {LoginModal} from "./Login"
+import { Chats } from "./Chats";
 
 export default function Layout() {
     const theme = useMantineTheme();
@@ -47,6 +48,7 @@ export default function Layout() {
         }`;
     const [hovered, setHovered] = useState(false);
     const [clicked, setClicked] = useState(false);
+    const [search, setSearch] = useState("");
 
     return (
         <AppShell
@@ -149,7 +151,7 @@ export default function Layout() {
                         </Box>
                     </Navbar.Section>
                     <Navbar.Section grow component={ScrollArea}>
-
+                    {tab === "Chats" && <Chats search={search} />}
                     </Navbar.Section>
                     <Navbar.Section sx={{ borderTop: border }} p="xs">
                         <Center>
