@@ -9,7 +9,7 @@ import {
     LoadingOverlay,
     Anchor, useMantineTheme,
 } from '@mantine/core';
-import { cloneElement, ReactElement, useContext } from "react";
+import { cloneElement, ReactElement } from "react";
 import { useForm } from '@mantine/form';
 import { IconLock } from '@tabler/icons-react';
 import { useState } from 'react';
@@ -18,7 +18,7 @@ import { useAuth } from '../utils/token'
 
 export function LoginModal({ children }: { children: ReactElement }) {
     const [opened, { open, close }] = useDisclosure(false);
-    const [formType, setFormType] = useState<'register' | 'login'>('register');
+    const [formType, setFormType] = useState<'register' | 'login'>('login');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>("");
     const theme = useMantineTheme();
@@ -33,7 +33,7 @@ export function LoginModal({ children }: { children: ReactElement }) {
             confirmPassword: '',
         },
     });
-    const { isLogged, login, logout } = useAuth();
+    const { user, login, logout } = useAuth();
     type FormValues = typeof form.values;
 
     const handleSubmit = (values: FormValues) => {
@@ -65,7 +65,7 @@ export function LoginModal({ children }: { children: ReactElement }) {
             })
                 .then(response => {
                     const token = response.data.data.access_token;
-                    console.log(token);
+                    console.log(token + user?.userId + user?.isLogged);
                     //localStorage.setItem('access_token', response.data.data.access_token)
                     login(token);
                     setLoading(false);
