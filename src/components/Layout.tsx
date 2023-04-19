@@ -38,7 +38,7 @@ import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
 import { LogoDIcon, LogoLIcon } from "./Logo";
 import { useEffect, useState } from "react";
 import {LoginModal} from "./Login"
-import { Chats } from "./Chats";
+import { Chats } from "./chats";
 
 export default function Layout() {
     const theme = useMantineTheme();
