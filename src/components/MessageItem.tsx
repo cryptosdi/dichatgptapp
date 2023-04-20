@@ -6,23 +6,20 @@ import {
   CopyButton,
   Flex,
   Table,
-  Text,
   ThemeIcon,
+  useMantineTheme,
   Tooltip,
 } from "@mantine/core";
-import { useClipboard } from "@mantine/hooks";
 import { IconCopy, IconUser } from "@tabler/icons-react";
-import { useMemo } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Message } from "../utils/index";
 import "../styles/markdown.scss"
-import { LogoMIcon } from "./Logo";
+import { LogoBIcon, LogoWIcon } from "./Logo";
 import { ScrollIntoView } from "./ScrollIntoView";
 
 export function MessageItem({ message }: { message: Message }) {
-  const clipboard = useClipboard({ timeout: 500 });
- 
+  const theme = useMantineTheme();
   return (
     <ScrollIntoView>
       <Card withBorder>
@@ -32,7 +29,10 @@ export function MessageItem({ message }: { message: Message }) {
               <IconUser size={20} />
             </ThemeIcon>
           )}
-          {message.role === "assistant" && <LogoMIcon style={{ height: 32 }} />}
+          {message.role === "assistant" &&
+            (theme.colorScheme === "dark" ? <LogoWIcon style={{ height: 30 }} /> : <LogoBIcon style={{ height: 30 }} />)
+          }
+
           <Box sx={{ flex: 1, width: 0 }} className="markdown">
             <ReactMarkdown
               children={message.content}
@@ -66,9 +66,18 @@ export function MessageItem({ message }: { message: Message }) {
                   ),
               }}
             />
-           
           </Box>
-         
+          <Box>
+            <CopyButton value={message.content}>
+              {({ copied, copy }) => (
+                <Tooltip label={copied ? "Copied" : "Copy"} position="left">
+                  <ActionIcon onClick={copy}>
+                    <IconCopy opacity={0.5} size={20} />
+                  </ActionIcon>
+                </Tooltip>
+              )}
+            </CopyButton>
+          </Box>
         </Flex>
       </Card>
     </ScrollIntoView>

@@ -37,7 +37,7 @@ import {
 import { Link, Outlet, useNavigate, useRouter } from "@tanstack/react-location";
 import { LogoDIcon, LogoLIcon } from "./Logo";
 import { useEffect, useState } from "react";
-import {LoginModal} from "./Login"
+import { LoginModal } from "./Login"
 import { Chats } from "./chats";
 
 export default function Layout() {
@@ -154,7 +154,7 @@ export default function Layout() {
                         </Box>
                     </Navbar.Section>
                     <Navbar.Section grow component={ScrollArea}>
-                    {tab === "Chats" && <Chats />}
+                        {tab === "Chats" && <Chats />}
                     </Navbar.Section>
                     <Navbar.Section sx={{ borderTop: border }} p="xs">
                         <Center>
@@ -177,7 +177,7 @@ export default function Layout() {
             layout="alt"
             padding={0}
         >
-        <Outlet />
+            <Outlet />
         </AppShell>
     );
 }

@@ -5,8 +5,6 @@ import {
   Container,
   Flex,
   MediaQuery,
-  Select,
-  SimpleGrid,
   Skeleton,
   Stack,
   Textarea,
@@ -51,7 +49,7 @@ export function ChatRoute() {
   }];
   const [content, setContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
-
+  const [hovered, setHovered] = useState(false);
 
 
   const submit = async () => {
@@ -119,11 +117,11 @@ export function ChatRoute() {
         py="lg"
         sx={(theme) => ({
           position: "fixed",
-          bottom: 0,
+          bottom: 5,
           left: 0,
           right: 0,
           [`@media (min-width: ${theme.breakpoints.md})`]: {
-            left: 300,
+            left: 200,
           },
           backgroundColor:
             theme.colorScheme === "dark"
@@ -176,14 +174,23 @@ export function ChatRoute() {
                 }
               }}
             />
-            <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+            <MediaQuery largerThan="sm" styles={{ display: "flex", }}>
               <Button
                 h="auto"
+                variant="outline"
+                styles={{
+                  root: {
+                    backgroundColor: 'transparent',
+                    borderColor: hovered ? '#27B882' : '#8a9da2',
+                  }
+                }}
+                onMouseEnter={() => setHovered(true)}
+                onMouseLeave={() => setHovered(false)}
                 onClick={() => {
                   submit();
                 }}
               >
-                <AiOutlineSend />
+                <AiOutlineSend style={{ color: '#27B882' }} />
               </Button>
             </MediaQuery>
           </Flex>

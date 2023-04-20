@@ -23,11 +23,9 @@ export function IndexRoute() {
       <Center py="xl" sx={{ height: "100%" }}>
         <Container size="sm">
           <Badge mb="lg">GPT-4 Ready</Badge>
-          <Text>
-            dfghjklkjhgfghjklkjhghjkl
-          </Text>
+
           <Text mt={4} size="xl">
-            Not just another ChatGPT user-interface!
+            Dichatgpt
           </Text>
           <SimpleGrid
             mt={50}
@@ -62,16 +60,5 @@ const features = [
     description:
       "This app is provided for free and the source code is available on GitHub.",
   },
-  {
-    icon: IconLock,
-    title: "Privacy focused",
-    description:
-      "No tracking, no cookies, no bullshit. All your data is stored locally.",
-  },
-  {
-    icon: IconNorthStar,
-    title: "Best experience",
-    description:
-      "Crafted with love and care to provide the best experience possible.",
-  },
+
 ];
