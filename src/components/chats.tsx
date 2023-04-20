@@ -6,13 +6,13 @@ import { DeleteChatModal } from "./DeleteChatModal";
 import { EditChatModal } from "./EditChatModal";
 import { MainLink } from "./MainLink";
 import { Chat } from "../utils/index";
+import { useChatId } from "./useChatId";
 
-export function Chats({ search }: { search: string }) {
-    //   const chatId = useChatId();
-    const chatId = "1";
+export function Chats() {
+    const chatId = useChatId();
     const chats: Chat[] = [
         {
-            id: "1",
+            id: "ZDZL3iLiuKzb1WQ5Xg4w6",
             description: "Alice",
             createdAt: new Date("2021-10-01"),
         },

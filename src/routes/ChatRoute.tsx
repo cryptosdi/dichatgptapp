@@ -13,35 +13,42 @@ import {
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { findLast } from "lodash";
-import { nanoid } from "nanoid";
 import { useState } from "react";
 import { AiOutlineSend } from "react-icons/ai";
 import { MessageItem } from "../components/MessageItem";
 
-import { useChatId } from "./useChatId";
+import { useChatId } from "../components/useChatId";
 import { Chat } from "../utils/index";
 
 export function ChatRoute() {
   const chatId = useChatId();
   const chats: Chat[] = [
     {
-        id: "1",
-        description: "Alice",
-        createdAt: new Date("2021-10-01"),
+      id: "ZDZL3iLiuKzb1WQ5Xg4w6",
+      description: "Alice",
+      createdAt: new Date("2021-10-01"),
     },
     {
-        id: "2",
-        description: "tobp",
-        createdAt: new Date("2022-10-01"),
+      id: "2",
+      description: "tobp",
+      createdAt: new Date("2022-10-01"),
     }
-];
-const chat = chats[0]
+  ];
+  const chat = chats[0]
 
-const messages = [{id: "1",
+  const messages = [{
+    id: "1",
+    chatId: "ZDZL3iLiuKzb1WQ5Xg4w6",
+    role: "assistant",
+    content: "rsp message",
+    createdAt: new Date("2021-10-01")
+  }, {
+    id: "2",
     chatId: "1",
     role: "user",
-    content: "message",
-    createdAt: new Date("2021-10-01")}];
+    content: "ask message",
+    createdAt: new Date("2021-10-01")
+  }];
   const [content, setContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
@@ -49,7 +56,6 @@ const messages = [{id: "1",
 
   const submit = async () => {
     if (submitting) return;
-
     if (!chatId) {
       notifications.show({
         title: "Error",
@@ -59,18 +65,14 @@ const messages = [{id: "1",
       return;
     }
 
-  
     try {
       setSubmitting(true);
-
-    
 
 
       setSubmitting(false);
 
-
       if (chat?.description === "New Chat") {
-        const messages = "";
+        //const messages = messages;
       }
     } catch (error: any) {
       if (error.toJSON().message === "Network Error") {

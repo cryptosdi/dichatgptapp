@@ -3,7 +3,8 @@ import { MantineProvider, ColorSchemeProvider, ColorScheme } from '@mantine/core
 import { useHotkeys, useLocalStorage } from '@mantine/hooks';
 import Layout from './components/Layout';
 import { AuthProvider } from './utils/token';
-import { ChatRoute } from './components/ChatRoute';
+import { ChatRoute } from './routes/ChatRoute';
+import { IndexRoute } from './routes/IndexRoute';
 import {
   createHashHistory,
   ReactLocation,
@@ -29,6 +30,7 @@ function App() {
     <Router
       location={location}
       routes={[
+        { path: "/", element: <IndexRoute /> },
         { path: "/chats/:chatId", element: <ChatRoute /> },
       ]}
     >

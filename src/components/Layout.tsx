@@ -48,7 +48,7 @@ export default function Layout() {
         }`;
     const [hovered, setHovered] = useState(false);
     const [clicked, setClicked] = useState(false);
-    const [search, setSearch] = useState("");
+    const navigate = useNavigate();
 
     return (
         <AppShell
@@ -140,7 +140,10 @@ export default function Layout() {
                                     }}
                                     onMouseEnter={() => setHovered(true)}
                                     onMouseLeave={() => setHovered(false)}
-                                    onClick={() => setClicked(!clicked)}
+                                    onClick={() => {
+                                        setClicked(!clicked);
+                                        navigate({ to: `/chats/ZDZL3iLiuKzb1WQ5Xg4w6` });
+                                    }}
                                 >
                                     New Chat
                                 </Button>
@@ -151,7 +154,7 @@ export default function Layout() {
                         </Box>
                     </Navbar.Section>
                     <Navbar.Section grow component={ScrollArea}>
-                    {tab === "Chats" && <Chats search={search} />}
+                    {tab === "Chats" && <Chats />}
                     </Navbar.Section>
                     <Navbar.Section sx={{ borderTop: border }} p="xs">
                         <Center>
@@ -174,7 +177,7 @@ export default function Layout() {
             layout="alt"
             padding={0}
         >
-
+        <Outlet />
         </AppShell>
     );
 }

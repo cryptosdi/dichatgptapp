@@ -17,7 +17,7 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { Message } from "../utils/index";
 import "../styles/markdown.scss"
-import { LogoDIcon } from "./Logo";
+import { LogoMIcon } from "./Logo";
 import { ScrollIntoView } from "./ScrollIntoView";
 
 export function MessageItem({ message }: { message: Message }) {
@@ -32,7 +32,7 @@ export function MessageItem({ message }: { message: Message }) {
               <IconUser size={20} />
             </ThemeIcon>
           )}
-          {message.role === "assistant" && <LogoDIcon style={{ height: 32 }} />}
+          {message.role === "assistant" && <LogoMIcon style={{ height: 32 }} />}
           <Box sx={{ flex: 1, width: 0 }} className="markdown">
             <ReactMarkdown
               children={message.content}

@@ -9,17 +9,6 @@ interface MainLinkProps {
 }
 
 export function MainLink({ icon, color, label, chat }: MainLinkProps) {
-  const firstMessage = {id: "1",
-    chatId: "1",
-    role: "user",
-    content: "message",
-    createdAt: new Date("2021-10-01")};
-    
-  // const firstMessage = useLiveQuery(async () => {
-  //   return (await db.messages.orderBy("createdAt").toArray()).filter(
-  //     (m) => m.chatId === chat.id
-  //   )[0];
-  // }, [chat]);
 
   return (
     <UnstyledButton
@@ -46,8 +35,7 @@ export function MainLink({ icon, color, label, chat }: MainLinkProps) {
             width: 0,
           }}
         >
-          {label} <br />
-          {firstMessage?.content}
+          {label}
         </Text>
       </Group>
     </UnstyledButton>
