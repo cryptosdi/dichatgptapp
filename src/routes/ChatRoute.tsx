@@ -16,41 +16,16 @@ import { AiOutlineSend } from "react-icons/ai";
 import { MessageItem } from "../components/MessageItem";
 
 import { useChatId } from "../components/useChatId";
-import { Chat } from "../utils/index";
+import { Chat, Message } from "../utils/index";
 
 export function ChatRoute() {
   const chatId = useChatId();
-  const chats: Chat[] = [
-    {
-      id: "ZDZL3iLiuKzb1WQ5Xg4w6",
-      description: "Alice",
-      createdAt: new Date("2021-10-01"),
-    },
-    {
-      id: "2",
-      description: "tobp",
-      createdAt: new Date("2022-10-01"),
-    }
-  ];
-  const chat = chats[0]
 
-  const messages = [{
-    id: "1",
-    chatId: "ZDZL3iLiuKzb1WQ5Xg4w6",
-    role: "assistant",
-    content: "rsp message",
-    createdAt: new Date("2021-10-01")
-  }, {
-    id: "2",
-    chatId: "1",
-    role: "user",
-    content: "ask message",
-    createdAt: new Date("2021-10-01")
-  }];
+  let messages:Message[] = []
+  const [data, setData] = useState<Message[]>([]);
   const [content, setContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [hovered, setHovered] = useState(false);
-
 
   const submit = async () => {
     if (submitting) return;
@@ -63,15 +38,28 @@ export function ChatRoute() {
       return;
     }
 
+    async function sleep(ms: number) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     try {
       setSubmitting(true);
+      let str = "dle";
+      for (let i = 0; i < 20; i++) {
+        let id = data.length + i;
+        str += id.toString()
+        let n_message: Message = { id: id.toString(), chatId: "3", role: "user", content: "dest" + str, createdAt: new Date("2021-10-01") }
+        setData([
+          ...data.slice(0, 3),
+          n_message,
+          ...data.slice(3 + 1, data.length),
+        ]);
+        await sleep(500);
+      }
 
 
       setSubmitting(false);
 
-      if (chat?.description === "New Chat") {
-        //const messages = messages;
-      }
     } catch (error: any) {
       if (error.toJSON().message === "Network Error") {
         notifications.show({
@@ -99,18 +87,12 @@ export function ChatRoute() {
     <>
       <Container pt="xl" pb={100}>
         <Stack spacing="xs">
-          {messages?.map((message) => (
+          {data?.map((message) => (
             <MessageItem key={message.id} message={message} />
           ))}
         </Stack>
         {submitting && (
-          <Card withBorder mt="xs">
-            <Skeleton height={8} radius="xl" />
-            <Skeleton height={8} mt={6} radius="xl" />
-            <Skeleton height={8} mt={6} radius="xl" />
-            <Skeleton height={8} mt={6} radius="xl" />
-            <Skeleton height={8} mt={6} width="70%" radius="xl" />
-          </Card>
+          <div>loanding</div>
         )}
       </Container>
       <Box
@@ -178,11 +160,13 @@ export function ChatRoute() {
               <Button
                 h="auto"
                 variant="outline"
+                disabled={submitting}
                 styles={{
                   root: {
                     backgroundColor: 'transparent',
                     borderColor: hovered ? '#27B882' : '#8a9da2',
-                  }
+                  },
+
                 }}
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}

@@ -32,7 +32,7 @@ export function DeleteChatModal({
               event.preventDefault();
               // await db.chats.where({ id: chat.id }).delete();
               // await db.messages.where({ chatId: chat.id }).delete();
-              if (chatId === chat.id) {
+              if (chatId === chat.chat_id) {
                 //navigate({ to: `/` });
               }
               close();

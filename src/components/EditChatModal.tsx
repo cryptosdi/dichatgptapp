@@ -16,7 +16,7 @@ export function EditChatModal({
 
   const [value, setValue] = useState("");
   useEffect(() => {
-    setValue(chat?.description ?? "");
+    setValue(chat?.chat_name ?? "");
   }, [chat]);
 
   return (

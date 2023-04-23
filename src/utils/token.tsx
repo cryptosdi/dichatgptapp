@@ -5,6 +5,7 @@ import jwt_decode from 'jwt-decode';
 interface User {
     userId: string;
     isLogged: boolean;
+    token: string;
 }
 
 interface AuthContextProps {
@@ -46,33 +47,33 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-          if (cookies.token) {
-            const decodedToken: any = jwt_decode(cookies.token); 
-            if (decodedToken.exp < Date.now() / 1000) {
-              logout();
+            if (cookies.token) {
+                const decodedToken: any = jwt_decode(cookies.token);
+                if (decodedToken.exp < Date.now() / 1000) {
+                    logout();
+                }
             }
-          }
         }, 3600000);
-    
+
         return () => {
-          clearInterval(interval);
+            clearInterval(interval);
         };
-      }, [cookies.token]);
-    
+    }, [cookies.token]);
+
 
     const login = (token: string) => {
         setCookie('token', token, { path: '/' });
         const decodedToken: any = jwt_decode(token);
-        const userId= decodedToken.sub;
-        setUser({ userId: userId, isLogged: true });
+        const userId = decodedToken.sub;
+        setUser({ userId: userId, isLogged: true, token: token });
     };
 
     const logout = () => {
-        removeCookie('token'); 
-        if (cookies.token){
+        removeCookie('token');
+        if (cookies.token) {
             const decodedToken: any = jwt_decode(cookies.token);
-            const userId= decodedToken.sub;
-            setUser({ userId: userId, isLogged: false });
+            const userId = decodedToken.sub;
+            setUser({ userId: userId, isLogged: false, token: '' });
         }
     };
 
