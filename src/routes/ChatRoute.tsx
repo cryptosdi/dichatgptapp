@@ -29,7 +29,7 @@ export function ChatRoute() {
 
   useEffect(() => {
     if (user?.isLogged) {
-      axios.post('http://127.0.0.1:5000/gpt/get', { "count": "3" }, {
+      axios.post('http://127.0.0.1:5000/gpt/get', { "count": "3", "chat_id": chatId }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + user.token
@@ -69,7 +69,7 @@ export function ChatRoute() {
       });
     }
   },
-    [user?.isLogged])
+    [user?.isLogged, chatId])
 
 
   const submit = async () => {
@@ -94,9 +94,36 @@ export function ChatRoute() {
 
     try {
       setSubmitting(true);
+      let tem_id = 0;
+      let tem_res_id = 1
+      if (messages.length === 0) {
+        tem_id = 100;
+        tem_res_id = 101
+      } else {
+        const lastElement = messages[messages.length - 1];
+        tem_id = lastElement.id + 10
+        tem_res_id = tem_id + 1
+      }
+
+      let msg_ask: Message = {
+        id: tem_id,
+        role: 'user',
+        content: content,
+        create_time: new Date()
+      }
+      messages.push(msg_ask)
+
+      let msg_res: Message = {
+        id: tem_res_id,
+        role: 'assistant',
+        content: '',
+        create_time: new Date()
+      }
+      messages.push(msg_res)
+
       const response = await fetch('http://127.0.0.1:5000/gpt/chat', {
         method: 'POST',
-        body: JSON.stringify({ content: content }),
+        body: JSON.stringify({ content: content, chatId: chatId }),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + user.token
@@ -106,18 +133,38 @@ export function ChatRoute() {
         setSubmitting(false);
         return;
       }
+      let tem_index = messages.findIndex(item => item.id === tem_id);
+      let tem_res_index = messages.findIndex(item => item.id === tem_res_id);
+      let tem_save_id = tem_id;
+      let tem_res_save_id = tem_res_id
       const reader = response.body.getReader();
-      let chunks = [];
+      let result_back = '';
       while (true) {
         const { done, value } = await reader.read();
         if (done) {
           break;
         }
-        chunks.push(value);
+        let item = new TextDecoder('utf-8').decode(value);
+        if (item.includes('saveId')) {
+          const [key, value] = item.split('=');
+          tem_save_id = Number(value);
+          tem_res_save_id = tem_save_id +1;
+          messages[tem_index].id = tem_save_id;
+          messages[tem_res_index].id = tem_res_save_id 
+          setMessages(messages)
+        } else {
+          result_back += item;
+        }
+        console.log("res item back=" + item)
+        msg_res.content = result_back;
+        setMessages([
+          ...messages.slice(0, tem_res_index),
+          msg_res,
+          ...messages.slice(tem_res_index + 1, messages.length),
+        ]);
       }
-      const result = new TextDecoder('utf-8').decode(
-        new Uint8Array(chunks.reduce((acc, chunk) => acc + chunk.length, 0))
-      );
+
+      console.log("res back=" + result_back)
       setSubmitting(false);
     } catch (error: any) {
       if (error.toJSON().message === "Network Error") {
