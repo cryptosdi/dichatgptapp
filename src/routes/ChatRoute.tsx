@@ -102,7 +102,7 @@ export function ChatRoute() {
         tem_res_id = 2
       } else {
         const lastElement = messages[messages.length - 1];
-        tem_id = lastElement.id +1 
+        tem_id = lastElement.id + 1
         tem_res_id = tem_id + 1
       }
       console.log(`submit tem_id=${tem_id} tem_res_id=${tem_res_id}`)
@@ -137,7 +137,7 @@ export function ChatRoute() {
       }
 
       let tem_res_index = messages.findIndex(item => item.id === tem_res_id);
-     
+
       const reader = response.body.getReader();
       let result_back = '';
       while (true) {
