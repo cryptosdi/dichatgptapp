@@ -28,7 +28,10 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     const [cookies, setCookie, removeCookie] = useCookies(['token']);
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User>(() => {
+        const storedUser = localStorage.getItem('user');
+        return storedUser ? JSON.parse(storedUser) as User : { userId: '', isLogged: false, token: '' };
+    });
 
     // useEffect(() => {
     //     if (cookies.token) {
@@ -66,15 +69,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const decodedToken: any = jwt_decode(token);
         const userId = decodedToken.sub;
         setUser({ userId: userId, isLogged: true, token: token });
+        localStorage.setItem('user', JSON.stringify({ userId: userId, isLogged: true, token: token }));
     };
 
     const logout = () => {
         removeCookie('token');
-        if (cookies.token) {
-            const decodedToken: any = jwt_decode(cookies.token);
-            const userId = decodedToken.sub;
-            setUser({ userId: userId, isLogged: false, token: '' });
-        }
+        setUser({ userId: '', isLogged: false, token: '' })
+        localStorage.setItem('user', JSON.stringify({ userId: '', isLogged: false, token: '' }));
     };
 
     return (
