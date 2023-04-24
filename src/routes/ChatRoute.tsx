@@ -40,10 +40,11 @@ export function ChatRoute() {
           console.log('post chats' + response.data.data.messages.size);
           let messages: Message[] = []
           let messages_arr = response.data.data.messages;
+          let msg_id = 0;
           for (let m_item of messages_arr) {
             for (let m_content of m_item.contents) {
               let msg: Message = {
-                id: m_content.role === 'user' ? m_item.id * 10 : m_item.id * 10 + 1,
+                id: msg_id++,
                 role: m_content.role,
                 content: m_content.content,
                 create_time: m_item.create_time
@@ -97,13 +98,14 @@ export function ChatRoute() {
       let tem_id = 0;
       let tem_res_id = 1
       if (messages.length === 0) {
-        tem_id = 100;
-        tem_res_id = 101
+        tem_id = 1;
+        tem_res_id = 2
       } else {
         const lastElement = messages[messages.length - 1];
-        tem_id = lastElement.id + 10
+        tem_id = lastElement.id +1 
         tem_res_id = tem_id + 1
       }
+      console.log(`submit tem_id=${tem_id} tem_res_id=${tem_res_id}`)
 
       let msg_ask: Message = {
         id: tem_id,
@@ -116,7 +118,7 @@ export function ChatRoute() {
       let msg_res: Message = {
         id: tem_res_id,
         role: 'assistant',
-        content: '',
+        content: 'pending',
         create_time: new Date()
       }
       messages.push(msg_res)
@@ -133,10 +135,9 @@ export function ChatRoute() {
         setSubmitting(false);
         return;
       }
-      let tem_index = messages.findIndex(item => item.id === tem_id);
+
       let tem_res_index = messages.findIndex(item => item.id === tem_res_id);
-      let tem_save_id = tem_id;
-      let tem_res_save_id = tem_res_id
+     
       const reader = response.body.getReader();
       let result_back = '';
       while (true) {
@@ -147,15 +148,11 @@ export function ChatRoute() {
         let item = new TextDecoder('utf-8').decode(value);
         if (item.includes('saveId')) {
           const [key, value] = item.split('=');
-          tem_save_id = Number(value);
-          tem_res_save_id = tem_save_id +1;
-          messages[tem_index].id = tem_save_id;
-          messages[tem_res_index].id = tem_res_save_id 
-          setMessages(messages)
+          let db_id = Number(value);
+          console.log(`submit db_id=${db_id}`)
         } else {
           result_back += item;
         }
-        console.log("res item back=" + item)
         msg_res.content = result_back;
         setMessages([
           ...messages.slice(0, tem_res_index),
@@ -163,8 +160,6 @@ export function ChatRoute() {
           ...messages.slice(tem_res_index + 1, messages.length),
         ]);
       }
-
-      console.log("res back=" + result_back)
       setSubmitting(false);
     } catch (error: any) {
       if (error.toJSON().message === "Network Error") {
