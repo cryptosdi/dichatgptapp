@@ -9,6 +9,7 @@ import { useChatId } from "./useChatId";
 import axios from 'axios'
 import { useAuth } from '../utils/token'
 import { useState, useEffect } from 'react';
+import { notifications } from "@mantine/notifications";
 
 export function Chats() {
     const chatId = useChatId();
@@ -39,8 +40,11 @@ export function Chats() {
                 })
 
         } else {
-            console.log('user need login');
-
+            notifications.show({
+                title: "Error",
+                color: "red",
+                message: "please login",
+              });
         }
     }, [user?.isLogged])
 
