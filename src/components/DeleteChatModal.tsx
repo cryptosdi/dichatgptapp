@@ -2,22 +2,24 @@ import { Button, Modal, Stack, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { useNavigate } from "@tanstack/react-location";
-import { cloneElement, ReactElement, useEffect, useState } from "react";
+import { cloneElement, ReactElement, useState } from "react";
 import { Chat } from "../utils/index";
-import { useChatId } from "./useChatId";
 import axios from 'axios'
 import { useAuth } from '../utils/token'
 
 export function DeleteChatModal({
   chat,
+  chats,
+  setChats,
   children,
 }: {
   chat: Chat;
+  chats: Chat[];
+  setChats: Function;
   children: ReactElement;
 }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
-  const chatId = useChatId();
   const navigate = useNavigate();
   const { user } = useAuth();
   const deleteChat = () => {
@@ -46,10 +48,15 @@ export function DeleteChatModal({
     }
     )
       .then(response => {
+        console.log("delete chat" + chat.chat_id)
+        let index = chats.findIndex(item => item.chat_id === chat.chat_id);
+        chats.splice(index,1)
+        setChats(chats)
         notifications.show({
           title: "Deleted",
-          message: "Chat deleted.",
+          message: chat.chat_name + " deleted.",
         });
+        navigate({ to: `/` });
       })
       .catch(error => {
         if (error.response) {
@@ -70,12 +77,9 @@ export function DeleteChatModal({
             try {
               setSubmitting(true);
               event.preventDefault();
-              deleteChat()
-              if (chatId === chat.chat_id || chatId === undefined) {
-                navigate({ to: `/` });
-              }
+              deleteChat();
               close();
-             
+
             } catch (error: any) {
               if (error.toJSON().message === "Network Error") {
                 notifications.show({

@@ -3,6 +3,9 @@ import { useDisclosure } from "@mantine/hooks";
 import { notifications } from "@mantine/notifications";
 import { cloneElement, ReactElement, useEffect, useState } from "react";
 import { Chat } from "../utils/index";
+import axios from 'axios'
+import { useAuth } from '../utils/token'
+import { useNavigate } from "@tanstack/react-location";
 
 export function EditChatModal({
   chat,
@@ -13,11 +16,43 @@ export function EditChatModal({
 }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [submitting, setSubmitting] = useState(false);
-
+  const { user } = useAuth();
   const [value, setValue] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     setValue(chat?.chat_name ?? "");
   }, [chat]);
+  const editChat = () => {
+    if (!user?.isLogged) {
+      notifications.show({
+        title: "Error",
+        color: "red",
+        message: "please login",
+      });
+      return;
+    }
+    console.log("editChat chatId=" + chat.chat_id)
+    axios.post('http://127.0.0.1:5000/gpt/update/chat', { "chat_id": chat.chat_id, "chat_name": value }, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + user.token
+      }
+    }
+    )
+      .then(response => {
+        console.log("edit chat" + chat.chat_id)
+        chat.chat_name = value;
+        navigate({ to: `/chats/${chat.chat_id}` });
+      })
+      .catch(error => {
+        if (error.response) {
+          console.error(error.response.data);
+          console.error(error.response.status);
+        } else {
+          console.error(error.message);
+        }
+      })
+  }
 
   return (
     <>
@@ -28,9 +63,7 @@ export function EditChatModal({
             try {
               setSubmitting(true);
               event.preventDefault();
-              // await db.chats.where({ id: chat.id }).modify((chat) => {
-              //   chat.description = value;
-              // });
+              editChat()
               notifications.show({
                 title: "Saved",
                 message: "",

@@ -82,7 +82,7 @@ export function Chats() {
                             <EditChatModal chat={chat}>
                                 <Menu.Item>Edit</Menu.Item>
                             </EditChatModal>
-                            <DeleteChatModal chat={chat}>
+                            <DeleteChatModal chat={chat} chats={chats} setChats={setChats} >
                                 <Menu.Item>Delete</Menu.Item>
                             </DeleteChatModal>
                         </Menu.Dropdown>
