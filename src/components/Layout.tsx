@@ -42,8 +42,7 @@ import { Chats } from "./chats";
 import axios from 'axios'
 import { useAuth } from '../utils/token'
 import { notifications } from "@mantine/notifications";
-import { chain } from "lodash";
-import { useChatId } from "./useChatId";
+
 
 export default function Layout() {
     const theme = useMantineTheme();

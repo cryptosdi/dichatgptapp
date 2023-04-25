@@ -10,6 +10,7 @@ import {
   ReactLocation,
   Router,
 } from "@tanstack/react-location";
+import { Notifications } from "@mantine/notifications";
 
 const history = createHashHistory();
 const location = new ReactLocation({ history });
@@ -38,6 +39,7 @@ function App() {
         <MantineProvider theme={{ colorScheme }} withGlobalStyles withNormalizeCSS>
           <AuthProvider>
             <Layout />
+            <Notifications />
           </AuthProvider>
         </MantineProvider>
       </ColorSchemeProvider>

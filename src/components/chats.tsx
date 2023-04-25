@@ -13,7 +13,7 @@ import { notifications } from "@mantine/notifications";
 
 export function Chats() {
     const chatId = useChatId();
-    const { user, login, logout } = useAuth();
+    const { user } = useAuth();
     const [chats, setChats] = useState<Chat[]>([]);
 
     useEffect(() => {
@@ -44,7 +44,7 @@ export function Chats() {
                 title: "Error",
                 color: "red",
                 message: "please login",
-              });
+            });
         }
     }, [user?.isLogged, chatId])
 
