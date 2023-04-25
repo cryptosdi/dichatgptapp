@@ -46,7 +46,7 @@ export function Chats() {
                 message: "please login",
               });
         }
-    }, [user?.isLogged])
+    }, [user?.isLogged, chatId])
 
     return (
         <>

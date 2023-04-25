@@ -39,6 +39,11 @@ import { LogoDIcon, LogoLIcon } from "./Logo";
 import { useEffect, useState } from "react";
 import { LoginModal } from "./Login"
 import { Chats } from "./chats";
+import axios from 'axios'
+import { useAuth } from '../utils/token'
+import { notifications } from "@mantine/notifications";
+import { chain } from "lodash";
+import { useChatId } from "./useChatId";
 
 export default function Layout() {
     const theme = useMantineTheme();
@@ -49,6 +54,39 @@ export default function Layout() {
     const [hovered, setHovered] = useState(false);
     const [clicked, setClicked] = useState(false);
     const navigate = useNavigate();
+    const { user } = useAuth();
+    const addChat = () => {
+
+        if (!user?.isLogged) {
+            notifications.show({
+                title: "Error",
+                color: "red",
+                message: "please login",
+            });
+            return;
+        }
+        axios.post('http://127.0.0.1:5000/gpt/add/chat', { "chat_name": "New Chat" }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + user.token
+            }
+        }
+        )
+            .then(response => {
+                let chatId = response.data.data.chat_id
+                console.log("newChat chatId=" + chatId)
+                navigate({ to: `/chats/${chatId}` });
+            })
+            .catch(error => {
+                if (error.response) {
+                    console.error(error.response.data);
+                    console.error(error.response.status);
+                } else {
+                    console.error(error.message);
+                }
+            })
+
+    }
 
     return (
         <AppShell
@@ -142,7 +180,7 @@ export default function Layout() {
                                     onMouseLeave={() => setHovered(false)}
                                     onClick={() => {
                                         setClicked(!clicked);
-                                        navigate({ to: `/chats/ZDZL3iLiuKzb1WQ5Xg4w6` });
+                                        addChat();
                                     }}
                                 >
                                     New Chat
@@ -181,3 +219,4 @@ export default function Layout() {
         </AppShell>
     );
 }
+
