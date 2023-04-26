@@ -169,7 +169,6 @@ export function ChatRoute() {
           ...messages.slice(tem_res_index + 1, messages.length),
         ]);
       }
-      setSubmitting(false);
     } catch (error: any) {
       if (error.toJSON().message === "Network Error") {
         notifications.show({
