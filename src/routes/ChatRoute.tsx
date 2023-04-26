@@ -1,13 +1,12 @@
 import {
   Box,
   Button,
-  Card,
   Container,
   Flex,
   MediaQuery,
-  Skeleton,
   Stack,
   Textarea,
+  Text,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import { findLast } from "lodash";
@@ -18,6 +17,9 @@ import axios from 'axios'
 import { useChatId } from "../components/useChatId";
 import { Message } from "../utils/index";
 import { useAuth } from '../utils/token'
+import {
+  IconPlayerStop,
+} from "@tabler/icons-react";
 
 export function ChatRoute() {
   const chatId = useChatId();
@@ -91,7 +93,14 @@ export function ChatRoute() {
       });
       return;
     }
-
+    if (!content) {
+      notifications.show({
+        title: "Error",
+        color: "red",
+        message: "please input message",
+      });
+      return;
+    }
 
     try {
       setSubmitting(true);
@@ -186,14 +195,30 @@ export function ChatRoute() {
 
   return (
     <>
-      <Container pt="xl" pb={100}>
+      <Container pt="xs" pb={100}>
         <Stack spacing="xs">
           {messages?.map((message) => (
             <MessageItem key={message.id} message={message} />
           ))}
         </Stack>
         {submitting && (
-          <div>loanding</div>
+
+          <Button variant="outline" size="xs"
+            leftIcon={<IconPlayerStop size={15} color="green" />}
+            styles={{
+              root: {
+                backgroundColor: 'transparent',
+                borderColor: '#27B882',
+              },
+
+            }}
+            onClick={() => {
+              setSubmitting(false);
+            }}
+          >
+            <Text color="#27B882">Stop responding</Text>
+          </Button>
+
         )}
       </Container>
       <Box
