@@ -24,15 +24,16 @@ export function MessageItem({ message }: { message: Message }) {
     <ScrollIntoView>
       <Card withBorder>
         <Flex gap="sm">
-          {message.role === "user" && (
-            <ThemeIcon color="gray" size="lg">
-              <IconUser size={20} />
-            </ThemeIcon>
-          )}
-          {message.role === "assistant" &&
-            (theme.colorScheme === "dark" ? <LogoWIcon style={{ height: 30 }} /> : <LogoBIcon style={{ height: 30 }} />)
-          }
-
+          <Box>
+            {message.role === "user" && (
+              <ThemeIcon color="gray" size="lg">
+                <IconUser size={20} />
+              </ThemeIcon>
+            )}
+            {message.role === "assistant" &&
+              (theme.colorScheme === "dark" ? <LogoWIcon style={{ height: 30 }} /> : <LogoBIcon style={{ height: 30 }} />)
+            }
+          </Box>
           <Box sx={{ flex: 1, width: 0 }} className="markdown">
             <ReactMarkdown
               children={message.content}
