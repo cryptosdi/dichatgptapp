@@ -15,6 +15,7 @@ import { IconLock } from '@tabler/icons-react';
 import { useState } from 'react';
 import axios from 'axios'
 import { useAuth } from '../utils/token'
+import { useNavigate } from "@tanstack/react-location";
 
 export function LoginModal({ children }: { children: ReactElement }) {
     const [opened, { open, close }] = useDisclosure(false);
@@ -34,7 +35,9 @@ export function LoginModal({ children }: { children: ReactElement }) {
         },
     });
     const { user, login, logout } = useAuth();
+    const [hovered, setHovered] = useState(false);
     type FormValues = typeof form.values;
+    const navigate = useNavigate();
 
     const handleSubmit = (values: FormValues) => {
         setLoading(true);
@@ -88,10 +91,29 @@ export function LoginModal({ children }: { children: ReactElement }) {
         <>
             {cloneElement(children, { onClick: open })}
             {(user?.userId && user?.isLogged) ? (
-                <Modal opened={opened} onClose={close} title="Focus demo">
-                    <Text>you have been logined~</Text>
+                <Modal opened={opened} onClose={close} title="You are Logined">
+                    <Group position="center">
+                        <Button
+                            variant="outline"
+                            onClick={() => {
+                                logout(); 
+                                navigate({ to: `/` });
+                            }}
+                            styles={{
+                                root: {
+                                    backgroundColor: 'transparent',
+                                    borderColor: hovered ? '#27B882' : '#8a9da2',
+                                },
+
+                            }}
+                            onMouseEnter={() => setHovered(true)}
+                            onMouseLeave={() => setHovered(false)}
+                        >
+                            <Text c={hovered ? "teal.4" : "dimmed"}> Login out </Text>
+                        </Button>
+                    </Group>
                 </Modal>
-             ) : (
+            ) : (
                 <Modal opened={opened} onClose={close} title="Login" centered>
                     <Paper
                         p={0}
@@ -160,7 +182,7 @@ export function LoginModal({ children }: { children: ReactElement }) {
                         </form>
                     </Paper>
                 </Modal>
-             )}
+            )}
         </>
     );
 }

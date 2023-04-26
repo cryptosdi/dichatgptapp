@@ -40,6 +40,7 @@ export function Chats() {
                 })
 
         } else {
+            setChats([]);
             notifications.show({
                 title: "Error",
                 color: "red",
