@@ -101,7 +101,8 @@ export function ChatRoute() {
       });
       return;
     }
-
+    const controller = new AbortController();
+    const signal = controller.signal;
     try {
       setSubmitting(true);
       let tem_id = 0;
@@ -138,7 +139,8 @@ export function ChatRoute() {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + user.token
-        }
+        },
+        signal
       });
       if (!response || !response.body) {
         setSubmitting(false);
@@ -152,6 +154,11 @@ export function ChatRoute() {
       while (true) {
         const { done, value } = await reader.read();
         if (done) {
+          break;
+        }
+        let flag = localStorage.getItem('chating_flag');
+        if ("stop" === flag) {
+          controller.abort();
           break;
         }
         let item = new TextDecoder('utf-8').decode(value);
@@ -187,6 +194,7 @@ export function ChatRoute() {
       }
     } finally {
       setSubmitting(false);
+      localStorage.setItem("chating_flag", "");
     }
   };
 
@@ -212,7 +220,7 @@ export function ChatRoute() {
 
             }}
             onClick={() => {
-              setSubmitting(false);
+              localStorage.setItem("chating_flag", "stop");
             }}
           >
             <Text color="#27B882">Stop responding</Text>
