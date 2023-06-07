@@ -16,6 +16,7 @@ import { useState } from 'react';
 import axios from 'axios'
 import { useAuth } from '../utils/token'
 import { useNavigate } from "@tanstack/react-location";
+import config from '../config.json';
 
 export function LoginModal({ children }: { children: ReactElement }) {
     const [opened, { open, close }] = useDisclosure(false);
@@ -42,7 +43,7 @@ export function LoginModal({ children }: { children: ReactElement }) {
     const handleSubmit = (values: FormValues) => {
         setLoading(true);
         formType === 'register' ?
-            axios.post('http://127.0.0.1:5000/login/reg', {
+            axios.post(`${config.apiBaseUrl}/login/reg`, {
                 un: values.name,
                 pw: values.password,
             })
@@ -62,7 +63,7 @@ export function LoginModal({ children }: { children: ReactElement }) {
                         console.error(error.message);
                     }
                 })
-            : axios.post('http://127.0.0.1:5000/login', {
+            : axios.post(`${config.apiBaseUrl}/login`, {
                 un: values.name,
                 pw: values.password,
             })

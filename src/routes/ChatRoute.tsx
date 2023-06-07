@@ -16,7 +16,8 @@ import { MessageItem } from "../components/MessageItem";
 import axios from 'axios'
 import { useChatId } from "../components/useChatId";
 import { Message } from "../utils/index";
-import { useAuth } from '../utils/token'
+import { useAuth } from '../utils/token';
+import config from "../config.json";
 import {
   IconPlayerStop,
 } from "@tabler/icons-react";
@@ -31,7 +32,7 @@ export function ChatRoute() {
 
   useEffect(() => {
     if (user?.isLogged) {
-      axios.post('http://127.0.0.1:5000/gpt/get', { "count": "3", "chat_id": chatId }, {
+      axios.post(`${config.apiBaseUrl}/gpt/get`, { "count": "3", "chat_id": chatId }, {
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + user.token
@@ -133,7 +134,7 @@ export function ChatRoute() {
       }
       messages.push(msg_res)
 
-      const response = await fetch('http://127.0.0.1:5000/gpt/chat', {
+      const response = await fetch(`${config.apiBaseUrl}/gpt/chat`, {
         method: 'POST',
         body: JSON.stringify({ content: content, chatId: chatId }),
         headers: {

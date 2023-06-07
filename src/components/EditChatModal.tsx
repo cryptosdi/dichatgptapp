@@ -6,6 +6,7 @@ import { Chat } from "../utils/index";
 import axios from 'axios'
 import { useAuth } from '../utils/token'
 import { useNavigate } from "@tanstack/react-location";
+import config from "../config.json";
 
 export function EditChatModal({
   chat,
@@ -32,7 +33,7 @@ export function EditChatModal({
       return;
     }
     console.log("editChat chatId=" + chat.chat_id)
-    axios.post('http://127.0.0.1:5000/gpt/update/chat', { "chat_id": chat.chat_id, "chat_name": value }, {
+    axios.post(`${config.apiBaseUrl}/gpt/update/chat`, { "chat_id": chat.chat_id, "chat_name": value }, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + user.token

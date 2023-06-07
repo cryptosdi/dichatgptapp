@@ -10,15 +10,16 @@ import axios from 'axios'
 import { useAuth } from '../utils/token'
 import { useState, useEffect } from 'react';
 import { notifications } from "@mantine/notifications";
+import config from "../config.json";
 
 export function Chats() {
     const chatId = useChatId();
     const { user } = useAuth();
     const [chats, setChats] = useState<Chat[]>([]);
-
+    
     useEffect(() => {
         if (user?.isLogged) {
-            axios.post('http://127.0.0.1:5000/gpt/get/chats', {}, {
+            axios.post(`${config.apiBaseUrl}/gpt/get/chats`, {}, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + user.token

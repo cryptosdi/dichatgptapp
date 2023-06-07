@@ -6,6 +6,7 @@ import { cloneElement, ReactElement, useState } from "react";
 import { Chat } from "../utils/index";
 import axios from 'axios'
 import { useAuth } from '../utils/token'
+import config from "../config.json";
 
 export function DeleteChatModal({
   chat,
@@ -40,7 +41,7 @@ export function DeleteChatModal({
       });
       return;
     }
-    axios.post('http://127.0.0.1:5000/gpt/delete/chat', { "chat_id": chat.chat_id }, {
+    axios.post(`${config.apiBaseUrl}/gpt/delete/chat`, { "chat_id": chat.chat_id }, {
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + user.token

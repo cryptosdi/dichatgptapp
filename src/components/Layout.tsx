@@ -42,7 +42,7 @@ import { Chats } from "./chats";
 import axios from 'axios'
 import { useAuth } from '../utils/token'
 import { notifications } from "@mantine/notifications";
-
+import config from "../config.json";
 
 export default function Layout() {
     const theme = useMantineTheme();
@@ -64,7 +64,7 @@ export default function Layout() {
             });
             return;
         }
-        axios.post('http://127.0.0.1:5000/gpt/add/chat', { "chat_name": "New Chat" }, {
+        axios.post(`${config.apiBaseUrl}/gpt/add/chat`, { "chat_name": "New Chat" }, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + user.token
